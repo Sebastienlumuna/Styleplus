@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use App\Enums\UserRole;
 
 class User extends Authenticatable
 {
@@ -21,7 +22,16 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
     ];
+    protected $enum = UserRole::class; 
+
+   
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
 
     /**
      * The attributes that should be hidden for serialization.
