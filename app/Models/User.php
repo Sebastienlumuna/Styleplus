@@ -26,7 +26,22 @@ class User extends Authenticatable
     ];
     protected $enum = UserRole::class; 
 
+   // Getter pour récupérer le rôle comme enum
+   public function getRoleEnum(): UserRole
+   {
+       return UserRole::from($this->role);
+   }
+
+   // Helper pour vérifier les rôles
+   public function isAdmin(): bool
+   {
+       return $this->role === UserRole::ADMIN->value;
+   }
    
+   public function isClient(): bool
+   {
+       return $this->role === UserRole::CLIENT->value;
+   }
     public function orders()
     {
         return $this->hasMany(Order::class);
