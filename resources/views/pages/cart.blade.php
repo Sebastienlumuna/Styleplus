@@ -57,7 +57,15 @@
                             <span>Total</span>
                             <span id="total">{{ number_format($subtotal,2,',',' ') }} €</span>
                         </div>
-                        <a href="payment.html" class="btn btn-dark w-100 mt-4 py-3" id="checkout-btn">Valider la commande</a>
+
+                        {{-- Bouton déclencheur du modal --}}
+                        @if(count($cart) > 0)
+                            <a href="#" class="btn btn-dark w-100 mt-4 py-3" id="checkout-btn" data-bs-toggle="modal" data-bs-target="#confirmOrderModal">
+                                Valider la commande
+                            </a>
+                        @else
+                            <a href="#" class="btn btn-dark w-100 mt-4 py-3 disabled">Panier vide</a>
+                        @endif
                     </div>
                 </div>
 
@@ -69,6 +77,30 @@
         </div>
     </div>
 </section>
+
+{{-- ✅ Modal de confirmation --}}
+<div class="modal fade" id="confirmOrderModal" tabindex="-1" aria-labelledby="confirmOrderLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="confirmOrderLabel">Confirmation de commande</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+      </div>
+      <div class="modal-body">
+        Êtes-vous sûr de vouloir valider cette commande et passer au paiement ?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annuler</button>
+        
+        {{-- Formulaire caché qui sera soumis --}}
+        <form action="{{ route('order.store') }}" method="POST" id="orderForm">
+            @csrf
+            <button type="submit" class="btn btn-dark">Oui, valider</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 
 <style>
 /* Animation pour les notifications */
@@ -151,7 +183,6 @@ document.addEventListener('DOMContentLoaded', function(){
             
             // Si le nombre d'éléments correspond, on peut juste mettre à jour
             if(currentItems.length === cartIds.length) {
-                // Mettre à jour les quantités et prix existants
                 currentItems.forEach(item => {
                     const id = item.dataset.id;
                     if(cart[id]) {
@@ -198,11 +229,8 @@ document.addEventListener('DOMContentLoaded', function(){
 
     // Fonction pour attacher les événements de suppression
     function attachRemoveEvents() {
-        // Supprimer tous les anciens événements
         const cartItems = document.getElementById('cart-items');
         if (!cartItems) return;
-
-        // Utiliser la délégation d'événements directement sur le conteneur
         cartItems.removeEventListener('click', handleRemoveClick);
         cartItems.addEventListener('click', handleRemoveClick);
     }
@@ -211,7 +239,6 @@ document.addEventListener('DOMContentLoaded', function(){
     function handleRemoveClick(e) {
         const button = e.target.closest('.remove-item');
         if (!button || button.disabled) return;
-
         e.preventDefault();
         e.stopPropagation();
         
@@ -273,7 +300,6 @@ document.addEventListener('DOMContentLoaded', function(){
         document.body.appendChild(alertDiv);
         setTimeout(()=>{ if(alertDiv.parentElement) alertDiv.remove(); }, 3000);
     }
-
 });
 </script>
 

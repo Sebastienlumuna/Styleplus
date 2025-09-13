@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\PaymentController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -29,5 +31,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard/admin', [App\Http\Controllers\Dashboard\AdminDashboardController::class, 'index'])->name('dashboard.admin');
 });
 
+Route::resource('order', OrderController::class)->names('order');
+
+Route::get('/payment/{order}', [PaymentController::class, 'index'])->name('payment');
+Route::post('/payment/{order}', [PaymentController::class, 'process'])->name('payment.process');
 // Auth
 require __DIR__.'/auth.php';
