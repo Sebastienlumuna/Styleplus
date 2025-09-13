@@ -91,6 +91,18 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function(){
+    // Fonction utilitaire pour formater les prix de manière sécurisée
+    function formatPrice(price) {
+        const numPrice = parseFloat(price);
+        if (isNaN(numPrice)) {
+            console.warn('Prix invalide:', price);
+            return '0,00';
+        }
+        return numPrice.toFixed(2).replace('.', ',');
+    }
+
+    // Attacher les événements de suppression au chargement
+    attachRemoveEvents();
 
     function updateCartUI(cart, subtotal){
         const cartItems = document.getElementById('cart-items');
@@ -99,27 +111,61 @@ document.addEventListener('DOMContentLoaded', function(){
         const totalElem = document.getElementById('total');
         const checkoutBtn = document.getElementById('checkout-btn');
 
-        subtotalElem.innerText = subtotal.toFixed(2).replace('.',',') + " €";
-        totalElem.innerText = subtotal.toFixed(2).replace('.',',') + " €";
+        // Mettre à jour les totaux
+        if(subtotalElem) subtotalElem.innerText = subtotal.toFixed(2).replace('.',',') + " €";
+        if(totalElem) totalElem.innerText = subtotal.toFixed(2).replace('.',',') + " €";
 
+        // Mettre à jour le badge du panier
+        const badge = document.querySelector('#cart-count');
+        if(badge){
+            const totalQuantity = Object.values(cart).reduce((a,b)=>a+b.quantity,0);
+            badge.innerText = totalQuantity;
+            badge.style.display = totalQuantity > 0 ? 'inline' : 'none';
+        }
+
+        // Gérer l'affichage du panier vide
         if(Object.keys(cart).length === 0){
             if(emptyMsg) emptyMsg.style.display = 'block';
-            cartItems.innerHTML = '';
+            if(cartItems) cartItems.innerHTML = '';
             if(checkoutBtn) { 
                 checkoutBtn.disabled = true; 
                 checkoutBtn.textContent = 'Panier vide'; 
                 checkoutBtn.classList.add('disabled'); 
             }
-        } else {
-            if(emptyMsg) emptyMsg.style.display = 'none';
-            cartItems.innerHTML = '';
-            if(checkoutBtn) { 
-                checkoutBtn.disabled = false; 
-                checkoutBtn.textContent = 'Valider la commande'; 
-                checkoutBtn.classList.remove('disabled'); 
+            return; // Sortir de la fonction si le panier est vide
+        }
+
+        // Panier non vide
+        if(emptyMsg) emptyMsg.style.display = 'none';
+        if(checkoutBtn) { 
+            checkoutBtn.disabled = false; 
+            checkoutBtn.textContent = 'Valider la commande'; 
+            checkoutBtn.classList.remove('disabled'); 
+        }
+
+        // Reconstruire les éléments du panier seulement si nécessaire
+        if(cartItems) {
+            // Vérifier si la reconstruction est nécessaire
+            const currentItems = cartItems.querySelectorAll('.cart-item');
+            const cartIds = Object.keys(cart);
+            
+            // Si le nombre d'éléments correspond, on peut juste mettre à jour
+            if(currentItems.length === cartIds.length) {
+                // Mettre à jour les quantités et prix existants
+                currentItems.forEach(item => {
+                    const id = item.dataset.id;
+                    if(cart[id]) {
+                        const quantityElem = item.querySelector('p:last-child');
+                        if(quantityElem) {
+                            quantityElem.textContent = `${cart[id].quantity} x ${formatPrice(cart[id].price)} €`;
+                        }
+                    }
+                });
+                return; // Pas besoin de reconstruire
             }
 
-            // Créer un fragment pour optimiser les performances
+            // Reconstruction complète nécessaire
+            cartItems.innerHTML = '';
             const fragment = document.createDocumentFragment();
             
             for(const id in cart){
@@ -132,7 +178,7 @@ document.addEventListener('DOMContentLoaded', function(){
                     <div class="flex-grow-1">
                         <h6>${item.name}</h6>
                         <p class="mb-0">Taille: ${item.size ?? 'N/A'}</p>
-                        <p class="mb-0">${item.quantity} x ${item.price.toFixed(2).replace('.',',')} €</p>
+                        <p class="mb-0">${item.quantity} x ${formatPrice(item.price)} €</p>
                     </div>
                     <div>
                         <button class="btn btn-sm btn-outline-danger remove-item" type="button">
@@ -143,64 +189,77 @@ document.addEventListener('DOMContentLoaded', function(){
                 fragment.appendChild(div);
             }
             
-            // Ajouter tous les éléments en une fois
             cartItems.appendChild(fragment);
-        }
-
-        // Mettre à jour le badge du panier
-        const badge = document.querySelector('#cart-count');
-        if(badge){
-            const totalQuantity = Object.values(cart).reduce((a,b)=>a+b.quantity,0);
-            badge.innerText = totalQuantity;
-            badge.style.display = totalQuantity > 0 ? 'inline' : 'none';
+            
+            // Réattacher les événements après reconstruction
+            attachRemoveEvents();
         }
     }
 
-    // Utiliser la délégation d'événements pour gérer les boutons de suppression
-    document.addEventListener('click', function(e){
-        // Vérifier si c'est un bouton de suppression ou un élément à l'intérieur
+    // Fonction pour attacher les événements de suppression
+    function attachRemoveEvents() {
+        // Supprimer tous les anciens événements
+        const cartItems = document.getElementById('cart-items');
+        if (!cartItems) return;
+
+        // Utiliser la délégation d'événements directement sur le conteneur
+        cartItems.removeEventListener('click', handleRemoveClick);
+        cartItems.addEventListener('click', handleRemoveClick);
+    }
+
+    // Fonction de gestion des clics de suppression
+    function handleRemoveClick(e) {
         const button = e.target.closest('.remove-item');
-        if(button && !button.disabled){
-            e.preventDefault();
-            e.stopPropagation();
-            
-            const cartItem = button.closest('.cart-item');
-            const id = cartItem.dataset.id;
-            const itemName = cartItem.querySelector('h6').textContent;
+        if (!button || button.disabled) return;
 
-            // Désactiver le bouton immédiatement
-            button.disabled = true;
-            button.innerHTML = '<i class="bi bi-hourglass-split me-1"></i>Suppression...';
+        e.preventDefault();
+        e.stopPropagation();
+        
+        const cartItem = button.closest('.cart-item');
+        if (!cartItem) return;
 
-            fetch(`/cart/remove/${id}`, {
-                method:'POST',
-                headers:{ 
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN':'{{ csrf_token() }}' 
-                }
-            })
-            .then(res => {
-                if (!res.ok) {
-                    throw new Error('Erreur réseau');
-                }
-                return res.json();
-            })
-            .then(data => {
-                if (data.success) {
-                    updateCartUI(data.cart, data.subtotal);
-                    showNotification(`"${itemName}" a été supprimé du panier`, 'success');
-                } else {
-                    throw new Error(data.message || 'Erreur de suppression');
-                }
-            })
-            .catch(err => {
-                console.error('Erreur de suppression:', err);
-                button.disabled = false;
-                button.innerHTML = '<i class="bi bi-trash me-1"></i>Supprimer';
-                showNotification('Erreur lors de la suppression', 'error');
-            });
-        }
-    });
+        const id = cartItem.dataset.id;
+        const itemName = cartItem.querySelector('h6').textContent;
+
+        // Désactiver le bouton immédiatement
+        button.disabled = true;
+        button.innerHTML = '<i class="bi bi-hourglass-split me-1"></i>Suppression...';
+
+        // Faire la requête de suppression
+        removeFromCart(id, itemName, button);
+    }
+
+    // Fonction pour supprimer un produit du panier
+    function removeFromCart(productId, itemName, button) {
+        fetch(`/cart/remove/${productId}`, {
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}' 
+            }
+        })
+        .then(res => {
+            if (!res.ok) {
+                throw new Error(`Erreur HTTP: ${res.status}`);
+            }
+            return res.json();
+        })
+        .then(data => {
+            if (data.success) {
+                // Mettre à jour l'interface avec les nouvelles données
+                updateCartUI(data.cart, data.subtotal);
+                showNotification(`"${itemName}" a été supprimé du panier`, 'success');
+            } else {
+                throw new Error(data.message || 'Erreur de suppression');
+            }
+        })
+        .catch(err => {
+            console.error('Erreur de suppression:', err);
+            button.disabled = false;
+            button.innerHTML = '<i class="bi bi-trash me-1"></i>Supprimer';
+            showNotification(`Erreur: ${err.message}`, 'error');
+        });
+    }
 
     function showNotification(message, type = 'success'){
         const alertDiv = document.createElement('div');

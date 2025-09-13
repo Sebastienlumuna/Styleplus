@@ -22,12 +22,12 @@ class CartController extends Controller
         $cart = session()->get('cart', []);
 
         if(isset($cart[$id])){
-            $cart[$id]['quantity'] += $quantity;
+            $cart[$id]['quantity'] += (int) $quantity; // S'assurer que la quantité est un entier
         } else {
             $cart[$id] = [
                 "name" => $product->name,
-                "price" => $product->price,
-                "quantity" => $quantity,
+                "price" => (float) $product->price, // S'assurer que le prix est un nombre
+                "quantity" => (int) $quantity, // S'assurer que la quantité est un entier
                 "image" => $product->image,
                 "size" => $request->input('size', null)
             ];
