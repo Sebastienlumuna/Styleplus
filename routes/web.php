@@ -33,7 +33,10 @@ Route::middleware(['auth'])->group(function () {
 
 Route::resource('order', OrderController::class)->names('order');
 
-Route::get('/payment/{order}', [PaymentController::class, 'index'])->name('payment');
-Route::post('/payment/{order}', [PaymentController::class, 'process'])->name('payment.process');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/order/{order}/payment', [PaymentController::class, 'index'])->name('payment');
+    Route::post('/order/{order}/payment', [PaymentController::class, 'process'])->name('payment.process');
+});
+
 // Auth
 require __DIR__.'/auth.php';

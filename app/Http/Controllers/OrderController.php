@@ -64,8 +64,8 @@ class OrderController extends Controller
         // Vider le panier de la session
         session()->forget('cart');
 
-        // Redirection vers paiement (tu passes l'ID de la commande)
-        return redirect()->route('payment', ['order' => $order->id]);
+        // Redirection vers paiement (tu passes l'objet Order)
+        return redirect()->route('payment', $order);
     }
 
 
