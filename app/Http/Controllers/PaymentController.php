@@ -103,7 +103,7 @@ class PaymentController extends Controller
             // Mise à jour du statut de la commande
             $order->update(['status' => 'paid']);
 
-            return redirect()->route('home')
+            return redirect()->route('invoice.show', $payment)
                 ->with('success', "Paiement effectué avec succès ! Transaction: {$transactionId}");
 
         } catch (\Illuminate\Validation\ValidationException $e) {

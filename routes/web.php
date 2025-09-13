@@ -4,6 +4,7 @@ use App\Http\Controllers\PageController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\InvoiceController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -36,6 +37,9 @@ Route::resource('order', OrderController::class)->names('order');
 Route::middleware(['auth'])->group(function () {
     Route::get('/order/{order}/payment', [PaymentController::class, 'index'])->name('payment');
     Route::post('/order/{order}/payment', [PaymentController::class, 'process'])->name('payment.process');
+    Route::get('/payment/{payment}/invoice', [InvoiceController::class, 'show'])->name('invoice.show');
+    Route::get('/payment/{payment}/invoice/pdf', [InvoiceController::class, 'download'])->name('invoice.pdf');
+
 });
 
 // Auth
