@@ -2,89 +2,153 @@
 @section('title', $product->name)
 @section('content')
 
-    <!-- Product Detail Section -->
-    <section class="py-5 mt-5">
-        <div class="container">
-            <div class="row">
-                <!-- Image produit -->
-                <div class="col-md-6">
-                    <img src="{{ asset('storage/' . $product->image) }}" 
-                         class="img-fluid rounded product-detail-img" 
-                         alt="{{ $product->name }}">
+<!-- Product Detail Section -->
+<section class="py-5 mt-5">
+    <div class="container">
+        <div class="row">
+            <!-- Image produit -->
+            <div class="col-md-6">
+                <img src="{{ route('product.image', $product) }}" 
+                     class="img-fluid rounded product-detail-img" 
+                     alt="{{ $product->name }}">
+            </div>
+
+            <!-- Infos produit -->
+            <div class="col-md-6">
+                <p class="text-muted">
+                    {{ $product->category->name ?? 'Autres' }}
+                </p>
+                <h1 class="fw-bold">{{ $product->name }}</h1>
+                <p class="h4 my-3">{{ number_format($product->price, 2, ',', ' ') }} €</p>
+
+                <div class="my-4">
+                    <h5>Description</h5>
+                    <p>{{ $product->description }}</p>
                 </div>
 
-                <!-- Infos produit -->
-                <div class="col-md-6">
-                    <p class="text-muted">
-                        {{ $product->category->name ?? 'Autres' }}
-                    </p>
-                    <h1 class="fw-bold">{{ $product->name }}</h1>
-                    <p class="h4 my-3">{{ number_format($product->price, 2, ',', ' ') }} €</p>
-
-                    <div class="my-4">
-                        <h5>Description</h5>
-                        <p>{{ $product->description }}</p>
+                <!-- Taille + Quantité -->
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <label for="size-select" class="form-label">Taille</label>
+                        <select class="form-select" id="size-select" name="size">
+                            @foreach(explode(',', $product->sizes) as $size)
+                                <option value="{{ trim($size) }}">{{ strtoupper(trim($size)) }}</option>
+                            @endforeach
+                        </select>
                     </div>
-
-                    <!-- Taille + Quantité -->
-                    <div class="row mb-4">
-                        <div class="col-md-6">
-                            <label for="size-select" class="form-label">Taille</label>
-                            <select class="form-select" id="size-select">
-                                <option value="s">S</option>
-                                <option value="m" selected>M</option>
-                                <option value="l">L</option>
-                                <option value="xl">XL</option>
-                            </select>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="quantity" class="form-label">Quantité</label>
-                            <div class="input-group">
-                                <button class="btn btn-outline-dark" type="button">-</button>
-                                <input type="number" class="form-control text-center" 
-                                       id="quantity" value="1" min="1">
-                                <button class="btn btn-outline-dark" type="button">+</button>
-                            </div>
+                    <div class="col-md-6">
+                        <label for="quantity" class="form-label">Quantité</label>
+                        <div class="input-group">
+                            <button class="btn btn-outline-dark btn-minus" type="button">-</button>
+                            <input type="number" class="form-control text-center" 
+                                   id="quantity" name="quantity" value="1" min="1">
+                            <button class="btn btn-outline-dark btn-plus" type="button">+</button>
                         </div>
                     </div>
-
-                    <!-- Bouton panier -->
-                    <form action="" method="POST">
-                        @csrf
-                        <button class="btn btn-dark btn-lg w-100 py-3" type="submit">
-                            Ajouter au panier
-                        </button>
-                    </form>
                 </div>
+
+                <!-- Bouton panier -->
+                <button class="btn btn-dark btn-lg w-100 py-3" id="add-to-cart">
+                    Ajouter au panier
+                </button>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <!-- Related Products -->
-    <section class="py-5 bg-light">
-        <div class="container">
-            <h2 class="text-center mb-5">VOUS AIMEREZ AUSSI</h2>
-            <div class="row g-4">
-                @foreach ($related as $item)
-                    <div class="col-xl-3 col-lg-4 col-md-6 col-12">
-                        <div class="card product-card h-100">
-                            <img src="{{ asset('storage/' . $item->image) }}" 
-                                 class="card-img-top product-img" 
-                                 alt="{{ $item->name }}">
-                            <div class="card-body">
-                                <span class="badge bg-dark mb-2">{{ $item->category->name ?? 'Autres' }}</span>
-                                <h5 class="card-title product-title">{{ $item->name }}</h5>
-                                <p class="card-text product-price">
-                                    {{ number_format($item->price, 2, ',', ' ') }} €
-                                </p>
-                                <a href="{{ route('products.show', $item->id) }}" 
-                                   class="btn btn-outline-dark">Voir détail</a>
-                            </div>
+<!-- Related Products -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center mb-5">VOUS AIMEREZ AUSSI</h2>
+        <div class="row g-4">
+            @foreach ($related as $item)
+                <div class="col-xl-3 col-lg-4 col-md-6 col-12">
+                    <div class="card product-card h-100">
+                        <img src="{{ route('product.image', $item) }}" 
+                             class="card-img-top product-img" 
+                             alt="{{ $item->name }}">
+                        <div class="card-body">
+                            <span class="badge bg-dark mb-2">{{ $item->category->name ?? 'Autres' }}</span>
+                            <h5 class="card-title product-title">{{ $item->name }}</h5>
+                            <p class="card-text product-price">
+                                {{ number_format($item->price, 2, ',', ' ') }} €
+                            </p>
+                            <a href="{{ route('products.show', $item->id) }}" 
+                               class="btn btn-outline-dark">Voir détail</a>
                         </div>
                     </div>
-                @endforeach
-            </div>
+                </div>
+            @endforeach
         </div>
-    </section>
+    </div>
+</section>
+
+{{-- Script JS pour la quantité et ajout au panier dynamique --}}
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const input = document.getElementById("quantity");
+    const btnMinus = document.querySelector(".btn-minus");
+    const btnPlus = document.querySelector(".btn-plus");
+
+    btnMinus.addEventListener("click", () => {
+        let current = parseInt(input.value);
+        if (current > 1) input.value = current - 1;
+    });
+
+    btnPlus.addEventListener("click", () => {
+        let current = parseInt(input.value);
+        input.value = current + 1;
+    });
+
+    const addBtn = document.getElementById('add-to-cart');
+    const sizeSelect = document.getElementById('size-select');
+
+    addBtn.addEventListener('click', () => {
+        const productId = "{{ $product->id }}";
+        const quantity = parseInt(input.value);
+        const size = sizeSelect.value;
+
+        fetch(`/cart/add/${productId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type':'application/json',
+                'X-CSRF-TOKEN':'{{ csrf_token() }}'
+            },
+            body: JSON.stringify({ quantity: quantity, size: size })
+        })
+        .then(res => res.json())
+        .then(data => {
+            // Mettre à jour le badge du panier
+            const badge = document.querySelector('#cart-count');
+            if(badge) {
+                badge.innerText = data.cartCount;
+                badge.style.display = data.cartCount > 0 ? 'inline' : 'none';
+            }
+            
+            // Afficher un message de confirmation plus élégant
+            const alertDiv = document.createElement('div');
+            alertDiv.className = 'alert alert-success position-fixed';
+            alertDiv.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+            alertDiv.innerHTML = `
+                <i class="bi bi-check-circle me-2"></i>
+                Produit ajouté au panier avec succès !
+                <button type="button" class="btn-close float-end" onclick="this.parentElement.remove()"></button>
+            `;
+            document.body.appendChild(alertDiv);
+            
+            // Supprimer automatiquement après 3 secondes
+            setTimeout(() => {
+                if(alertDiv.parentElement) {
+                    alertDiv.remove();
+                }
+            }, 3000);
+        })
+        .catch(err => {
+            console.error(err);
+            alert("Erreur lors de l'ajout au panier");
+        });
+    });
+});
+</script>
 
 @endsection

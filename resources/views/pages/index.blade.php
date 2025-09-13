@@ -55,7 +55,7 @@
                      data-category="{{ strtolower($product->category->slug ?? 'autre') }}">
                     <div class="card h-100">
                         {{-- Image --}}
-                        <img src="{{ asset('storage/'.$product->image) }}" 
+                        <img src="{{ route('product.image', $product) }}" 
                              class="card-img-top product-img" 
                              alt="{{ $product->name }}">
                         

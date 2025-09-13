@@ -12,18 +12,16 @@
                 <li class="nav-item">
                     <a class="nav-link active" href="{{ route('home') }}">Accueil</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#" data-filter="femme">Femme</a>
+                <li class="nav-item position-relative">
+                    <a class="nav-link" href="{{ route('cart') }}">
+                        <i class="bi bi-cart3"></i>
+                        <span class="badge bg-danger position-absolute top-0 start-100 translate-middle" id="cart-count">
+                            {{ $cartCount ?? 0 }}
+                        </span>
+                        Panier
+                    </a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#" data-filter="homme">Homme</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#" data-filter="enfant">Enfant</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="cart.html"><i class="bi bi-cart3"></i> Panier</a>
-                </li>
+                
                 <li class="nav-item">
                     <a class="nav-link" href="login.html"><i class="bi bi-person"></i> Connexion</a>
                 </li>

@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\View;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -21,5 +22,14 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Paginator::useBootstrap();
+
+        // On partage avec toutes les vues
+    View::composer('*', function ($view) {
+        $cart = session()->get('cart', []);
+        $cartCount = array_sum(array_column($cart, 'quantity'));
+        $view->with('cartCount', $cartCount);
+    });
+
+
     }
 }
