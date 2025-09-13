@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
 class CheckRole
@@ -15,9 +16,20 @@ class CheckRole
      */
     public function handle(Request $request, Closure $next, string $role): Response
     {
-        if ($request->user()->role !== $role) {
-            abort(403, 'Accès refusé.');
+        if (!Auth::check()) {
+            return redirect()->route('loginform');
         }
+
+        $user = Auth::user();
+        
+        if ($role === 'admin' && !$user->isAdmin()) {
+            abort(403, 'Accès refusé. Rôle administrateur requis.');
+        }
+        
+        if ($role === 'client' && !$user->isClient()) {
+            abort(403, 'Accès refusé. Rôle client requis.');
+        }
+
         return $next($request);
     }
 }

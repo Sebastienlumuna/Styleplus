@@ -22,9 +22,33 @@
                     </a>
                 </li>
                 
-                <li class="nav-item">
-                    <a class="nav-link" href="login.html"><i class="bi bi-person"></i> Connexion</a>
-                </li>
+                @auth
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-person-circle"></i> {{ Auth::user()->name }}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="{{ route('dashboard') }}">
+                                <i class="bi bi-speedometer2 me-2"></i>Dashboard
+                            </a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <form method="POST" action="{{ route('logout') }}" class="d-inline">
+                                    @csrf
+                                    <button type="submit" class="dropdown-item">
+                                        <i class="bi bi-box-arrow-right me-2"></i>Déconnexion
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
+                @else
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('loginform') }}">
+                            <i class="bi bi-person"></i> Connexion
+                        </a>
+                    </li>
+                @endauth
             </ul>
         </div>
     </div>
