@@ -55,9 +55,12 @@
                      data-category="{{ strtolower($product->category->slug ?? 'autre') }}">
                     <div class="card h-100">
                         {{-- Image --}}
-                        <img src="{{ route('product.image', $product) }}" 
-                             class="card-img-top product-img" 
-                             alt="{{ $product->name }}">
+                        @php
+                            $img = Str::startsWith($product->image ?? '', 'http') 
+                                ? $product->image 
+                                : ($product->image ? asset('storage/'.$product->image) : asset('img/default.png'));
+                        @endphp
+                        <img src="{{ $img }}" ...>
                         
                         <div class="card-body">
                             {{-- Catégorie (badge) --}}

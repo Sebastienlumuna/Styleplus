@@ -25,7 +25,7 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#">
+            <a class="nav-link" href="{{ route('admin.products.index') }}">
                 <i class="bi bi-box"></i>
                 <span>Produits</span>
             </a>

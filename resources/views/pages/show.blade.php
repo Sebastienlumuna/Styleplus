@@ -8,9 +8,12 @@
         <div class="row">
             <!-- Image produit -->
             <div class="col-md-6">
-                <img src="{{ route('product.image', $product) }}" 
-                     class="img-fluid rounded product-detail-img" 
-                     alt="{{ $product->name }}">
+                @php
+                    $img = Str::startsWith($product->image ?? '', 'http') 
+                        ? $product->image 
+                        : ($product->image ? asset('storage/'.$product->image) : asset('img/default.png'));
+                @endphp
+                <img src="{{ $img }}" ...>
             </div>
 
             <!-- Infos produit -->
