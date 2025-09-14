@@ -121,6 +121,6 @@ class ProductController extends Controller
             Storage::disk('public')->delete($product->image);
         }
         $product->delete();
-        return response()->json(['success' => true]);
+        return redirect()->route('admin.products.index')->with('success', 'Produit supprimé avec succès !');
     }
 }

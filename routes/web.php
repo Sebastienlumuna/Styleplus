@@ -45,6 +45,7 @@ Route::middleware(['auth'])->group(function () {
 
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::resource('products', \App\Http\Controllers\Admin\ProductController::class)->names('admin.products');
+    
 });
 
 // Auth
