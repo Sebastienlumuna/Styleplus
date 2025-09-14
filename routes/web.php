@@ -35,6 +35,7 @@ Route::middleware(['auth'])->group(function () {
 Route::resource('order', OrderController::class)->names('order');
 
 Route::middleware(['auth'])->group(function () {
+    Route::get('/order/{order}', [OrderController::class, 'show'])->name('order.show');
     Route::get('/order/{order}/payment', [PaymentController::class, 'index'])->name('payment');
     Route::post('/order/{order}/payment', [PaymentController::class, 'process'])->name('payment.process');
     Route::get('/payment/{payment}/invoice', [InvoiceController::class, 'show'])->name('invoice.show');

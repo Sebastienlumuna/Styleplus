@@ -88,9 +88,16 @@ class OrderController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Order $order)
     {
-        //
+        // Vérifie que l'utilisateur est bien le propriétaire
+        if ($order->user_id !== auth()->id()) {
+            abort(403, 'Accès non autorisé à cette commande');
+        }
+
+        $order->load('items.product');
+
+        return view('data.orders.show', compact('order'));
     }
 
     /**

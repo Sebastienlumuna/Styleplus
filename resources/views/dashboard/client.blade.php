@@ -11,18 +11,7 @@
                 <span>Tableau de bord</span>
             </a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#">
-                <i class="bi bi-bag"></i>
-                <span>Mes commandes</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#">
-                <i class="bi bi-person"></i>
-                <span>Mon profil</span>
-            </a>
-        </li>
+
         <li class="nav-item">
             <a class="nav-link" href="{{ route('home') }}">
                 <i class="bi bi-house"></i>
@@ -98,7 +87,10 @@
                                     </span>
                                 </td>
                                 <td>
-                                    <a href="#" class="btn btn-sm btn-outline-primary">Voir</a>
+                                    <a href="{{ route('order.show', $order) }}" class="btn btn-sm btn-outline-primary">Voir</a>
+                                    @if($order->status === 'pending')
+                                        <a href="{{ route('payment', $order) }}" class="btn btn-sm btn-outline-success ms-1">Payer</a>
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach
