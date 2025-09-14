@@ -16,32 +16,49 @@ class CartController extends Controller
 
     public function add(Request $request, $id)
     {
-        $product = Product::findOrFail($id);
-        $quantity = $request->input('quantity', 1);
+        try {
+            $product = Product::findOrFail($id);
+            $quantity = $request->input('quantity', 1);
 
-        $cart = session()->get('cart', []);
+            $cart = session()->get('cart', []);
 
-        if(isset($cart[$id])){
-            $cart[$id]['quantity'] += (int) $quantity; // S'assurer que la quantité est un entier
-        } else {
-            $cart[$id] = [
-                "name" => $product->name,
-                "price" => (float) $product->price, // S'assurer que le prix est un nombre
-                "quantity" => (int) $quantity, // S'assurer que la quantité est un entier
-                "image" => $product->image,
-                "size" => $request->input('size', null)
-            ];
+            if(isset($cart[$id])){
+                $cart[$id]['quantity'] += (int) $quantity;
+            } else {
+                $cart[$id] = [
+                    "name" => $product->name,
+                    "price" => (float) $product->price,
+                    "quantity" => (int) $quantity,
+                    "image" => $product->image,
+                    "size" => $request->input('size', null)
+                ];
+            }
+
+            session()->put('cart', $cart);
+            $cartCount = array_sum(array_column($cart, 'quantity'));
+            $subtotal = array_sum(array_map(fn($item) => $item['price'] * $item['quantity'], $cart));
+
+            return response()->json([
+                'success' => true,
+                'cartCount' => $cartCount,
+                'subtotal' => $subtotal,
+                'cart' => $cart
+            ]);
+
+        } catch (\Exception $e) {
+            \Log::error('Erreur ajout panier: ' . $e->getMessage(), [
+                'product_id' => $id,
+                'quantity' => $request->input('quantity', 1),
+                'ip' => $request->ip(),
+                'user_agent' => $request->userAgent()
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Erreur lors de l\'ajout au panier',
+                'error' => $e->getMessage()
+            ], 500);
         }
-
-        session()->put('cart', $cart);
-        $cartCount = array_sum(array_column($cart, 'quantity'));
-        $subtotal = array_sum(array_map(fn($item) => $item['price'] * $item['quantity'], $cart));
-
-        return response()->json([
-            'cartCount' => $cartCount,
-            'subtotal' => $subtotal,
-            'cart' => $cart
-        ]);
     }
 
     public function remove(Request $request, $id)

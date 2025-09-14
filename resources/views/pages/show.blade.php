@@ -108,44 +108,65 @@ document.addEventListener("DOMContentLoaded", () => {
         const quantity = parseInt(input.value);
         const size = sizeSelect.value;
 
-        fetch(`/cart/add/${productId}`, {
+        fetch(`{{ url('/cart/add') }}/${productId}`, {
             method: 'POST',
             headers: {
                 'Content-Type':'application/json',
-                'X-CSRF-TOKEN':'{{ csrf_token() }}'
+                'X-CSRF-TOKEN':'{{ csrf_token() }}',
+                'Accept': 'application/json'
             },
             body: JSON.stringify({ quantity: quantity, size: size })
         })
-        .then(res => res.json())
-        .then(data => {
-            // Mettre à jour le badge du panier
-            const badge = document.querySelector('#cart-count');
-            if(badge) {
-                badge.innerText = data.cartCount;
-                badge.style.display = data.cartCount > 0 ? 'inline' : 'none';
+        .then(res => {
+            if (!res.ok) {
+                throw new Error(`HTTP ${res.status}: ${res.statusText}`);
             }
-            
-            // Afficher un message de confirmation plus élégant
+            return res.json();
+        })
+        .then(data => {
+            if (data.success) {
+                const badge = document.querySelector('#cart-count');
+                if(badge) {
+                    badge.innerText = data.cartCount;
+                    badge.style.display = data.cartCount > 0 ? 'inline' : 'none';
+                }
+                
+                const alertDiv = document.createElement('div');
+                alertDiv.className = 'alert alert-success position-fixed';
+                alertDiv.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+                alertDiv.innerHTML = `
+                    <i class="bi bi-check-circle me-2"></i>
+                    Produit ajouté au panier avec succès !
+                    <button type="button" class="btn-close float-end" onclick="this.parentElement.remove()"></button>
+                `;
+                document.body.appendChild(alertDiv);
+                
+                setTimeout(() => {
+                    if(alertDiv.parentElement) {
+                        alertDiv.remove();
+                    }
+                }, 3000);
+            } else {
+                throw new Error(data.message || 'Erreur inconnue');
+            }
+        })
+        .catch(err => {
+            console.error('Erreur ajout panier:', err);
             const alertDiv = document.createElement('div');
-            alertDiv.className = 'alert alert-success position-fixed';
+            alertDiv.className = 'alert alert-danger position-fixed';
             alertDiv.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
             alertDiv.innerHTML = `
-                <i class="bi bi-check-circle me-2"></i>
-                Produit ajouté au panier avec succès !
+                <i class="bi bi-exclamation-triangle me-2"></i>
+                Erreur lors de l'ajout au panier: ${err.message}
                 <button type="button" class="btn-close float-end" onclick="this.parentElement.remove()"></button>
             `;
             document.body.appendChild(alertDiv);
             
-            // Supprimer automatiquement après 3 secondes
             setTimeout(() => {
                 if(alertDiv.parentElement) {
                     alertDiv.remove();
                 }
-            }, 3000);
-        })
-        .catch(err => {
-            console.error(err);
-            alert("Erreur lors de l'ajout au panier");
+            }, 5000);
         });
     });
 });
