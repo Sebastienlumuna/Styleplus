@@ -30,6 +30,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
     Route::get('/dashboard/client', [App\Http\Controllers\Dashboard\ClientDashboardController::class, 'index'])->name('dashboard.client');
     Route::get('/dashboard/admin', [App\Http\Controllers\Dashboard\AdminDashboardController::class, 'index'])->name('dashboard.admin');
+    Route::get('/profil', [\App\Http\Controllers\ProfilController::class, 'edit'])->name('profil.edit');
+    Route::post('/profil', [\App\Http\Controllers\ProfilController::class, 'update'])->name('profil.update');
 });
 
 Route::resource('order', OrderController::class)->names('order');

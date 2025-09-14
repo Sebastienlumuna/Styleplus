@@ -208,7 +208,7 @@
                             <li><a class="dropdown-item" href="{{ route('dashboard') }}">
                                 <i class="bi bi-speedometer2 me-2"></i>Dashboard
                             </a></li>
-                            <li><a class="dropdown-item" href="#">
+                            <li><a class="dropdown-item" href="{{ route('profil.edit') }}">
                                 <i class="bi bi-person me-2"></i>Profil
                             </a></li>
                             <li><hr class="dropdown-divider"></li>
