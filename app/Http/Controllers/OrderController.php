@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\OrderItem;
+use Illuminate\Support\Facades\DB;
+use App\Models\Product;
 
 class OrderController extends Controller
 {
@@ -34,37 +36,49 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-        //
         $cart = session()->get('cart', []);
-
+    
         if (empty($cart)) {
             return redirect()->route('cart')->with('error', 'Votre panier est vide ❌');
         }
-
-        // Calcul du total
+    
         $total = array_sum(array_map(fn($item) => $item['price'] * $item['quantity'], $cart));
-
-        // Création de la commande
-        $order = Order::create([
-            'user_id' => auth()->id(), // ou null si pas connecté
-            'total'   => $total,
-            'status'  => 'pending'
-        ]);
-
-        // Création des OrderItems
-        foreach ($cart as $productId => $item) {
-            OrderItem::create([
-                'order_id'   => $order->id,
-                'product_id' => $productId,
-                'quantity'   => $item['quantity'],
-                'price'      => $item['price'],
-            ]);
+    
+        try {
+            DB::transaction(function () use ($cart, $total, &$order) {
+                // Création de la commande
+                $order = Order::create([
+                    'user_id' => auth()->id(),
+                    'total'   => $total,
+                    'status'  => 'pending'
+                ]);
+    
+                foreach ($cart as $productId => $item) {
+                    $product = Product::findOrFail($productId);
+    
+                    if ($product->stock < $item['quantity']) {
+                        throw new \Exception("Stock insuffisant pour le produit {$product->name} ❌");
+                    }
+    
+                    // Créer l'OrderItem
+                    OrderItem::create([
+                        'order_id'   => $order->id,
+                        'product_id' => $productId,
+                        'quantity'   => $item['quantity'],
+                        'price'      => $item['price'],
+                    ]);
+    
+                    // Décrémenter le stock
+                    $product->decrement('stock', $item['quantity']);
+                }
+    
+                // Vider le panier
+                session()->forget('cart');
+            });
+        } catch (\Exception $e) {
+            return redirect()->route('cart')->with('error', $e->getMessage());
         }
-
-        // Vider le panier de la session
-        session()->forget('cart');
-
-        // Redirection vers paiement (tu passes l'objet Order)
+    
         return redirect()->route('payment', $order);
     }
 

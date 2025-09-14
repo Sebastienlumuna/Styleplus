@@ -4,6 +4,13 @@
 
 <section class="py-5 mt-5">
     <div class="container">
+        @if(session('error'))
+            <div class="alert alert-danger text-center mb-4">
+                <i class="bi bi-exclamation-triangle me-2"></i>
+                {{ session('error') }}
+            </div>
+        @endif
+
         <h1 class="text-center mb-5">VOTRE PANIER</h1>
         <div class="row">
             <div class="col-lg-8">
