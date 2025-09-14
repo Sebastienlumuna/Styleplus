@@ -30,6 +30,9 @@
 
 
 <div class="mb-3 text-end">
+    <a href="{{ route('admin.products.report.pdf') }}" class="btn btn-outline-success">
+        <i class="bi bi-printer"></i> Exporter PDF produits
+    </a>
     <a href="{{ route('admin.products.create') }}" class="btn btn-primary">
         <i class="bi bi-plus"></i> Ajouter un produit
     </a>

@@ -8,6 +8,7 @@ use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class ProductController extends Controller
 {
@@ -122,5 +123,21 @@ class ProductController extends Controller
         }
         $product->delete();
         return redirect()->route('admin.products.index')->with('success', 'Produit supprimé avec succès !');
+    }
+
+    /**
+     * Export products to PDF.
+     */
+    public function exportPdf()
+    {
+        $products = \App\Models\Product::with('category')->get();
+        $totalStock = $products->sum('stock');
+
+        $pdf = Pdf::loadView('reports.product', [
+            'products' => $products,
+            'totalStock' => $totalStock,
+        ]);
+
+        return $pdf->download('rapport-produits.pdf');
     }
 }

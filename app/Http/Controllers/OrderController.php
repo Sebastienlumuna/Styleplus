@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use Illuminate\Support\Facades\DB;
 use App\Models\Product;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class OrderController extends Controller
 {
@@ -122,5 +123,24 @@ class OrderController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    /**
+     * Export orders to PDF.
+     */
+    public function exportPdf()
+    {
+        $orders = \App\Models\Order::with('user')->latest()->get();
+
+        $totalCommandes = $orders->count();
+        $totalPayees = $orders->where('status', 'paid')->count();
+
+        $pdf = Pdf::loadView('reports.order', [
+            'orders' => $orders,
+            'totalCommandes' => $totalCommandes,
+            'totalPayees' => $totalPayees,
+        ]);
+
+        return $pdf->download('rapport-commandes.pdf');
     }
 }

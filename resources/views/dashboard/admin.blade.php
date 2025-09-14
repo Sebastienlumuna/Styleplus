@@ -5,8 +5,9 @@
 
 @section('page-actions')
     <div class="btn-group">
-        <button type="button" class="btn btn-sm btn-outline-primary">Exporter</button>
-        <button type="button" class="btn btn-sm btn-primary">Ajouter</button>
+        <a href="{{ route('admin.orders.report.pdf') }}" class="btn btn-sm btn-outline-primary">
+            <i class="bi bi-printer"></i> Imprimer rapport commandes PDF
+        </a>
     </div>
 @endsection
 
