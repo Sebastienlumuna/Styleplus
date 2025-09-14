@@ -263,9 +263,8 @@ document.addEventListener('DOMContentLoaded', function(){
         removeFromCart(id, itemName, button);
     }
 
-    // Fonction pour supprimer un produit du panier
     function removeFromCart(productId, itemName, button) {
-        fetch(`/cart/remove/${productId}`, {
+        fetch(`{{ url('/cart/remove') }}/${productId}`, {  // <-- correction ici
             method: 'POST',
             headers: { 
                 'Content-Type': 'application/json',
