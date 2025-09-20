@@ -13,7 +13,10 @@
                         ? $product->image 
                         : ($product->image ? asset('storage/'.$product->image) : asset('img/default.png'));
                 @endphp
-                <img src="{{ $img }}" ...>
+             <img src="{{ $img }}"
+                 class="card-img-top img-fluid d-block mx-auto"
+                 style="max-width: 350px; max-height: 350px; width: 100%; height: auto; object-fit: cover; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.07);" 
+                 alt="{{ $product->name }}">
             </div>
 
             <!-- Infos produit -->

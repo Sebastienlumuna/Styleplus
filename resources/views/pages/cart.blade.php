@@ -21,8 +21,9 @@
                                 @foreach($cart as $id => $item)
                                     <div class="d-flex align-items-center mb-3 cart-item" data-id="{{ $id }}">
                                         <img src="{{ route('product.image', $id) }}" 
-                                             alt="{{ $item['name'] }}" 
-                                             style="width:80px; height:80px; object-fit:cover; margin-right:15px;">
+                                            alt="{{ $item['name'] }}" 
+                                            class="card-img-top img-fluid"
+                                            style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px; margin-right: 15px; flex-shrink: 0;">
                                         <div class="flex-grow-1">
                                             <h6>{{ $item['name'] }}</h6>
                                             <p class="mb-0">Taille: {{ $item['size'] ?? 'N/A' }}</p>

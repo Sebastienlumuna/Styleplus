@@ -60,7 +60,7 @@
                                 ? $product->image 
                                 : ($product->image ? asset('storage/'.$product->image) : asset('img/default.png'));
                         @endphp
-                        <img src="{{ $img }}" ...>
+                        <img src="{{ $img }}" class="card-img-top img-fluid" style="height: 220px; object-fit: cover; width: 100%;" alt="{{ $product->name }}">
                         
                         <div class="card-body">
                             {{-- Catégorie (badge) --}}
