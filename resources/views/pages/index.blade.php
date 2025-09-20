@@ -12,14 +12,14 @@
                 <div class="col-12 text-center">
                     <h1 class="display-4 fw-bold text-white">STYLE & CONFORT POUR TOUS</h1>
                     <p class="lead text-light">Découvrez notre collection de vêtements pour Homme, Femme et Enfant</p>
-                    <a href="#products" class="btn btn-outline-light btn-lg mt-3">Découvrir</a>
+                    <a href="#products" class="btn btn-outline-light btn-lg mt-3 btn-hero-mobile">Découvrir</a>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Filter Section -->
-    <section class="py-4 bg-light">
+    <section class="py-4 bg-light d-none d-md-block"><!-- Masqué sur mobile, visible à partir de md -->
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-md-10">

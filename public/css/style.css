@@ -17,11 +17,15 @@ body {
 /* Hero Section */
 .hero-section {
     background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary-dark) 100%);
+    min-height: 60vh;
     height: 70vh;
     display: flex;
     align-items: center;
+    justify-content: center;
     margin-top: -76px; /* Compensate for fixed navbar */
     padding-top: 76px;
+    padding-bottom: 30px;
+    text-align: center;
 }
 
 /* Section Titles */
@@ -264,46 +268,68 @@ footer a:hover {
 
 
 /* Responsive Adjustments */
-@media (max-width: 768px) {
+@media (max-width: 991.98px) {
     .hero-section {
-        height: 50vh;
+        min-height: 40vh;
+        height: 45vh;
+        padding-top: 60px;
+        padding-bottom: 20px;
     }
-    
     .section-title {
         font-size: 2rem;
     }
-    
     .product-img {
-        height: 250px;
+        height: 220px;
     }
-    
     .product-detail-img {
-        height: 350px;
+        height: 300px;
     }
-    
-    /* Responsive pour les boutons de filtre catégorie */
-    .d-flex.flex-wrap.justify-content-center.gap-2 {
-        flex-direction: column !important;
-        align-items: stretch !important;
-        gap: 10px !important;
-    }
-    .d-flex.flex-wrap.justify-content-center.gap-2 .btn {
-        width: 100%;
-        font-size: 1rem;
+    .product-card {
+        margin-bottom: 15px;
     }
 }
 
-@media (max-width: 576px) {
+@media (max-width: 767.98px) {
     .hero-section {
-        height: 40vh;
+        min-height: 30vh;
+        height: 32vh;
+        padding-top: 40px;
+        padding-bottom: 10px;
     }
-    
     .display-4 {
-        font-size: 2rem;
+        font-size: 1.1rem;
+        line-height: 1.2;
     }
-    
+    .lead {
+        font-size: 0.95rem;
+    }
     .section-title {
-        font-size: 1.75rem;
+        font-size: 1.3rem;
+    }
+    .btn-hero-mobile {
+        width: 100%;
+        max-width: 320px;
+        font-size: 1.1rem;
+        padding: 14px 0;
+        margin: 18px auto 0 auto;
+        display: block;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    .product-img, .product-detail-img {
+        height: 180px;
+    }
+    .product-card {
+        margin-bottom: 10px;
+    }
+    .card-body {
+        padding: 10px;
+    }
+    .cart-item-img {
+        width: 70px;
+        height: 70px;
+    }
+    .payment-card {
+        padding: 10px;
     }
 }
 
@@ -311,12 +337,5 @@ footer a:hover {
     .d-flex.flex-wrap.justify-content-center.gap-2 .btn {
         font-size: 0.95rem;
         padding: 8px 10px;
-    }
-}
-
-/* Cacher les boutons de filtre catégorie sur mobile */
-@media (max-width: 767.98px) {
-    .d-flex.flex-wrap.justify-content-center.gap-2 {
-        display: none !important;
     }
 }
