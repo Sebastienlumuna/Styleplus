@@ -32,7 +32,7 @@
                 {{ ucfirst($order->status) }}
             </span>
         </p>
-        <p><strong>Total :</strong> {{ number_format($order->total, 2, ',', ' ') }} €</p>
+        <p><strong>Total :</strong> {{ number_format($order->total, 2, ',', ' ') }} $</p>
     </div>
 </div>
 
@@ -56,8 +56,8 @@
                         <tr>
                             <td>{{ $item->product->name ?? 'Produit supprimé' }}</td>
                             <td>{{ $item->quantity }}</td>
-                            <td>{{ number_format($item->price, 2, ',', ' ') }} €</td>
-                            <td>{{ number_format($item->price * $item->quantity, 2, ',', ' ') }} €</td>
+                            <td>{{ number_format($item->price, 2, ',', ' ') }} $</td>
+                            <td>{{ number_format($item->price * $item->quantity, 2, ',', ' ') }} $</td>
                         </tr>
                     @endforeach
                 </tbody>

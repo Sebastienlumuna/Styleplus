@@ -45,7 +45,7 @@
             <div class="card-body">
                 <div class="d-flex justify-content-between">
                     <div>
-                        <h4 class="card-title">{{ number_format($totalSpent, 2, ',', ' ') }} €</h4>
+                        <h4 class="card-title">{{ number_format($totalSpent, 2, ',', ' ') }} $</h4>
                         <p class="card-text">Total dépensé</p>
                     </div>
                     <div class="align-self-center">
@@ -80,7 +80,7 @@
                             <tr>
                                 <td>#{{ $order->id }}</td>
                                 <td>{{ $order->created_at->format('d/m/Y') }}</td>
-                                <td>{{ number_format($order->total, 2, ',', ' ') }} €</td>
+                                <td>{{ number_format($order->total, 2, ',', ' ') }} $</td>
                                 <td>
                                     <span class="badge bg-{{ $order->status === 'paid' ? 'success' : 'warning' }}">
                                         {{ ucfirst($order->status) }}

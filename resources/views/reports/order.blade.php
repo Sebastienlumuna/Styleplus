@@ -31,7 +31,7 @@
             <tr>
                 <td>#{{ $order->id }}</td>
                 <td>{{ $order->user->name ?? 'N/A' }}</td>
-                <td>{{ number_format($order->total, 2, ',', ' ') }} €</td>
+                <td>{{ number_format($order->total, 2, ',', ' ') }} $</td>
                 <td>{{ ucfirst($order->status) }}</td>
                 <td>{{ $order->created_at->format('d/m/Y H:i') }}</td>
             </tr>

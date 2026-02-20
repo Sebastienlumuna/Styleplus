@@ -25,7 +25,7 @@
                     {{ $product->category->name ?? 'Autres' }}
                 </p>
                 <h1 class="fw-bold">{{ $product->name }}</h1>
-                <p class="h4 my-3">{{ number_format($product->price, 2, ',', ' ') }} €</p>
+                <p class="h4 my-3">{{ number_format($product->price, 2, ',', ' ') }} $</p>
 
                 <div class="my-4">
                     <h5>Description</h5>
@@ -77,7 +77,7 @@
                             <span class="badge bg-dark mb-2">{{ $item->category->name ?? 'Autres' }}</span>
                             <h5 class="card-title product-title">{{ $item->name }}</h5>
                             <p class="card-text product-price">
-                                {{ number_format($item->price, 2, ',', ' ') }} €
+                                {{ number_format($item->price, 2, ',', ' ') }} $
                             </p>
                             <a href="{{ route('products.show', $item->id) }}" 
                                class="btn btn-outline-dark">Voir détail</a>

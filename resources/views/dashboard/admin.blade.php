@@ -98,7 +98,7 @@
                     <div class="col mr-2">
                         <div class="text-xs fw-bold text-warning text-uppercase mb-1">
                             Chiffre d'affaires</div>
-                        <div class="h5 mb-0 fw-bold text-gray-800">{{ number_format($totalRevenue, 2, ',', ' ') }} €</div>
+                        <div class="h5 mb-0 fw-bold text-gray-800">{{ number_format($totalRevenue, 2, ',', ' ') }} $</div>
                     </div>
                     <div class="col-auto">
                         <i class="bi bi-currency-euro fa-2x text-gray-300"></i>
@@ -133,7 +133,7 @@
                                 <tr>
                                     <td>#{{ $order->id }}</td>
                                     <td>{{ $order->user->name ?? 'N/A' }}</td>
-                                    <td>{{ number_format($order->total, 2, ',', ' ') }} €</td>
+                                    <td>{{ number_format($order->total, 2, ',', ' ') }} $</td>
                                     <td>
                                         <span class="badge bg-{{ $order->status === 'paid' ? 'success' : ($order->status === 'pending' ? 'warning' : 'danger') }}">
                                             {{ ucfirst($order->status) }}
@@ -170,7 +170,7 @@
             </div>
             <div class="card-body">
                 <div class="text-center">
-                    <h3 class="text-success">{{ number_format($revenueLast30Days, 2, ',', ' ') }} €</h3>
+                    <h3 class="text-success">{{ number_format($revenueLast30Days, 2, ',', ' ') }} $</h3>
                     <p class="text-muted">Chiffre d'affaires</p>
                 </div>
             </div>

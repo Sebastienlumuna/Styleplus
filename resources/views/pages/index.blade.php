@@ -73,7 +73,7 @@
 
                             {{-- Prix --}}
                             <p class="card-text product-price">
-                                {{ number_format($product->price, 2, ',', ' ') }} €
+                                {{ number_format($product->price, 2, ',', ' ') }} $
                             </p>
 
                             {{-- Lien détail --}}

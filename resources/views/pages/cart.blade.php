@@ -27,7 +27,7 @@
                                         <div class="flex-grow-1">
                                             <h6>{{ $item['name'] }}</h6>
                                             <p class="mb-0">Taille: {{ $item['size'] ?? 'N/A' }}</p>
-                                            <p class="mb-0">{{ $item['quantity'] }} x {{ number_format($item['price'],2,',',' ') }} €</p>
+                                            <p class="mb-0">{{ $item['quantity'] }} x {{ number_format($item['price'],2,',',' ') }} $</p>
                                         </div>
                                         <div>
                                             <button class="btn btn-sm btn-outline-danger remove-item">
@@ -54,16 +54,16 @@
                         <h5 class="card-title">RÉSUMÉ DE LA COMMANDE</h5>
                         <div class="d-flex justify-content-between mt-4">
                             <span>Sous-total</span>
-                            <span id="subtotal">{{ number_format($subtotal,2,',',' ') }} €</span>
+                            <span id="subtotal">{{ number_format($subtotal,2,',',' ') }} $</span>
                         </div>
                         <div class="d-flex justify-content-between mt-2">
                             <span>Livraison</span>
-                            <span id="shipping">0,00 €</span>
+                            <span id="shipping">0,00 $</span>
                         </div>
                         <hr>
                         <div class="d-flex justify-content-between mt-2 fw-bold">
                             <span>Total</span>
-                            <span id="total">{{ number_format($subtotal,2,',',' ') }} €</span>
+                            <span id="total">{{ number_format($subtotal,2,',',' ') }} $</span>
                         </div>
 
                         {{-- Bouton déclencheur du modal --}}
@@ -78,7 +78,7 @@
                 </div>
 
                 <div class="mt-4">
-                    <p class="text-muted small"><i class="bi bi-truck"></i> Livraison offerte à partir de 100€ d'achat</p>
+                    <p class="text-muted small"><i class="bi bi-truck"></i> Livraison offerte à partir de 100$ d'achat</p>
                     <p class="text-muted small"><i class="bi arrow-return-left"></i> Retours gratuits sous 30 jours</p>
                 </div>
             </div>
@@ -152,8 +152,8 @@ document.addEventListener('DOMContentLoaded', function(){
         const checkoutBtn = document.getElementById('checkout-btn');
 
         // Mettre à jour les totaux
-        if(subtotalElem) subtotalElem.innerText = subtotal.toFixed(2).replace('.',',') + " €";
-        if(totalElem) totalElem.innerText = subtotal.toFixed(2).replace('.',',') + " €";
+        if(subtotalElem) subtotalElem.innerText = subtotal.toFixed(2).replace('.',',') + " $";
+        if(totalElem) totalElem.innerText = subtotal.toFixed(2).replace('.',',') + " $";
 
         // Mettre à jour le badge du panier
         const badge = document.querySelector('#cart-count');
@@ -196,7 +196,7 @@ document.addEventListener('DOMContentLoaded', function(){
                     if(cart[id]) {
                         const quantityElem = item.querySelector('p:last-child');
                         if(quantityElem) {
-                            quantityElem.textContent = `${cart[id].quantity} x ${formatPrice(cart[id].price)} €`;
+                            quantityElem.textContent = `${cart[id].quantity} x ${formatPrice(cart[id].price)} $`;
                         }
                     }
                 });
@@ -217,7 +217,7 @@ document.addEventListener('DOMContentLoaded', function(){
                     <div class="flex-grow-1">
                         <h6>${item.name}</h6>
                         <p class="mb-0">Taille: ${item.size ?? 'N/A'}</p>
-                        <p class="mb-0">${item.quantity} x ${formatPrice(item.price)} €</p>
+                        <p class="mb-0">${item.quantity} x ${formatPrice(item.price)} $</p>
                     </div>
                     <div>
                         <button class="btn btn-sm btn-outline-danger remove-item" type="button">

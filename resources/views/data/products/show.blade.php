@@ -87,7 +87,7 @@
 
     <div class="row mb-3">
         <div class="col-md-4">
-            <label class="form-label">Prix (€)</label>
+            <label class="form-label">Prix ($)</label>
             <input type="number" step="0.01" name="price" class="form-control" value="{{ old('price', $product->price) }}" required>
         </div>
         <div class="col-md-4">
