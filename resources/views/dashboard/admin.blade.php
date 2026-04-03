@@ -5,7 +5,7 @@
 
 @section('page-actions')
     <div class="btn-group">
-        <a href="{{ route('admin.orders.report.pdf') }}" class="btn btn-sm btn-outline-primary">
+        <a href="{{ route('admin.orders.export.pdf') }}" class="btn btn-sm btn-outline-primary">
             <i class="bi bi-printer"></i> Imprimer rapport commandes PDF
         </a>
     </div>
@@ -19,14 +19,30 @@
                 <span>Tableau de bord</span>
             </a>
         </li>
-        
+        <li class="nav-item">
+            <a class="nav-link" href="#">
+                <i class="bi bi-people"></i>
+                <span>Utilisateurs</span>
+            </a>
+        </li>
         <li class="nav-item">
             <a class="nav-link" href="{{ route('admin.products.index') }}">
                 <i class="bi bi-box"></i>
                 <span>Produits</span>
             </a>
         </li>
-     
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('admin.orders.index') }}">
+                <i class="bi bi-bag"></i>
+                <span>Commandes</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('admin.statistics') }}">
+                <i class="bi bi-graph-up"></i>
+                <span>Statistiques</span>
+            </a>
+        </li>
         <li class="nav-item">
             <a class="nav-link" href="{{ route('home') }}">
                 <i class="bi bi-house"></i>

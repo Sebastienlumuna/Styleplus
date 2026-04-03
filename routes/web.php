@@ -47,8 +47,10 @@ Route::middleware(['auth'])->group(function () {
 
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::resource('products', \App\Http\Controllers\Admin\ProductController::class)->names('admin.products');
-    Route::get('orders/report/pdf', [\App\Http\Controllers\OrderController::class, 'exportPdf'])->name('admin.orders.report.pdf');
+    Route::resource('orders', \App\Http\Controllers\Admin\OrderController::class)->only(['index', 'show', 'destroy'])->names('admin.orders');
+    Route::get('orders/export/pdf', [\App\Http\Controllers\Admin\OrderController::class, 'exportPdf'])->name('admin.orders.export.pdf');
     Route::get('products/report/pdf', [\App\Http\Controllers\Admin\ProductController::class, 'exportPdf'])->name('admin.products.report.pdf');
+    Route::get('statistics', [\App\Http\Controllers\Admin\StatisticsController::class, 'index'])->name('admin.statistics');
 });
 
 // Auth

@@ -16,6 +16,7 @@
     <h2>Rapport des commandes</h2>
     <p>Total de commandes : <strong>{{ $totalCommandes }}</strong></p>
     <p>Total de commandes payées : <strong>{{ $totalPayees }}</strong></p>
+    <p>Revenu total : <strong>{{ number_format($totalRevenu ?? 0, 2, ',', ' ') }} $</strong></p>
     <table>
         <thead>
             <tr>
