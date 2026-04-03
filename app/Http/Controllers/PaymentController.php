@@ -45,6 +45,11 @@ class PaymentController extends Controller
 
         $rules = [
             'method' => ['required', Rule::in($available)],
+            'delivery_address' => 'required|string|max:255',
+            'delivery_city' => 'required|string|max:100',
+            'delivery_postal_code' => 'nullable|string|max:20',
+            'delivery_phone' => 'required|string|max:20',
+            'delivery_notes' => 'nullable|string|max:500',
         ];
 
         $method = $request->input('method');
@@ -101,7 +106,24 @@ class PaymentController extends Controller
             ]);
 
             // Mise à jour du statut de la commande
-            $order->update(['status' => 'paid']);
+            $order->update([
+                'status' => 'paid',
+                'delivery_address' => $validated['delivery_address'],
+                'delivery_city' => $validated['delivery_city'],
+                'delivery_postal_code' => $validated['delivery_postal_code'] ?? null,
+                'delivery_phone' => $validated['delivery_phone'],
+            ]);
+
+            // Création de la livraison
+            \App\Models\Delivery::create([
+                'order_id' => $order->id,
+                'address' => $validated['delivery_address'],
+                'city' => $validated['delivery_city'],
+                'postal_code' => $validated['delivery_postal_code'] ?? null,
+                'phone' => $validated['delivery_phone'],
+                'notes' => $validated['delivery_notes'] ?? null,
+                'status' => 'pending',
+            ]);
 
             return redirect()->route('invoice.show', $payment)
                 ->with('success', "Paiement effectué avec succès ! Transaction: {$transactionId}");

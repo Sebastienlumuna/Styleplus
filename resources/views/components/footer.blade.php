@@ -2,7 +2,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-4 mb-3">
-                <h5>STYLEPLUS</h5>
+                <h5>Boutique fille de sarah</h5>
                 <p>Vêtements confortables pour toute la famille.</p>
             </div>
             <div class="col-md-2 mb-3">
@@ -35,7 +35,7 @@
         <hr class="my-4">
         <div class="row">
             <div class="col-md-6">
-                <p>&copy; 2023 StylePlus. Tous droits réservés.</p>
+                <p>&copy; 2023 Boutique fille de sarah. Tous droits réservés.</p>
             </div>
             <div class="col-md-6 text-md-end">
                 <a href="#" class="text-light me-3"><i class="bi bi-instagram"></i></a>

@@ -11,7 +11,18 @@
                 <span>Tableau de bord</span>
             </a>
         </li>
-
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('my.deliveries') }}">
+                <i class="bi bi-truck"></i>
+                <span>Mes livraisons</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('profil.edit') }}">
+                <i class="bi bi-person"></i>
+                <span>Mon profil</span>
+            </a>
+        </li>
         <li class="nav-item">
             <a class="nav-link" href="{{ route('home') }}">
                 <i class="bi bi-house"></i>

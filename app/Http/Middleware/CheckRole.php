@@ -30,6 +30,10 @@ class CheckRole
             abort(403, 'Accès refusé. Rôle client requis.');
         }
 
+        if ($role === 'livreur' && $user->role !== \App\Enums\UserRole::LIVREUR->value) {
+            abort(403, 'Accès refusé. Rôle livreur requis.');
+        }
+
         return $next($request);
     }
 }

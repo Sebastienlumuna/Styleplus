@@ -10,7 +10,7 @@
         <div class="container h-100">
             <div class="row h-100 align-items-center">
                 <div class="col-12 text-center">
-                    <h1 class="display-4 fw-bold text-white">STYLE & CONFORT POUR TOUS</h1>
+                    <h1 class="display-4 fw-bold text-white">BOUTIQUE FILLE DE SARAH</h1>
                     <p class="lead text-light">Découvrez notre collection de vêtements pour Homme, Femme et Enfant</p>
                     <a href="#products" class="btn btn-outline-light btn-lg mt-3 btn-hero-mobile">Découvrir</a>
                 </div>

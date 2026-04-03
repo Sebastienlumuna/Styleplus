@@ -30,8 +30,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
     Route::get('/dashboard/client', [App\Http\Controllers\Dashboard\ClientDashboardController::class, 'index'])->name('dashboard.client');
     Route::get('/dashboard/admin', [App\Http\Controllers\Dashboard\AdminDashboardController::class, 'index'])->name('dashboard.admin');
+    Route::get('/dashboard/livreur', [App\Http\Controllers\Dashboard\LivreurDashboardController::class, 'index'])->name('dashboard.livreur');
     Route::get('/profil', [\App\Http\Controllers\ProfilController::class, 'edit'])->name('profil.edit');
     Route::post('/profil', [\App\Http\Controllers\ProfilController::class, 'update'])->name('profil.update');
+    
+    // Livraisons client
+    Route::get('/my-deliveries', [\App\Http\Controllers\DeliveryController::class, 'myDeliveries'])->name('my.deliveries');
+    Route::get('/deliveries/{delivery}', [\App\Http\Controllers\DeliveryController::class, 'show'])->name('deliveries.show');
 });
 
 Route::resource('order', OrderController::class)->names('order');
@@ -51,6 +56,14 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::get('orders/export/pdf', [\App\Http\Controllers\Admin\OrderController::class, 'exportPdf'])->name('admin.orders.export.pdf');
     Route::get('products/report/pdf', [\App\Http\Controllers\Admin\ProductController::class, 'exportPdf'])->name('admin.products.report.pdf');
     Route::get('statistics', [\App\Http\Controllers\Admin\StatisticsController::class, 'index'])->name('admin.statistics');
+});
+
+// Routes livreur
+Route::middleware(['auth', 'role:livreur'])->prefix('livreur')->group(function () {
+    Route::post('/deliveries/{delivery}/assign', [\App\Http\Controllers\Dashboard\LivreurDashboardController::class, 'assign'])->name('livreur.assign');
+    Route::post('/deliveries/{delivery}/start', [\App\Http\Controllers\Dashboard\LivreurDashboardController::class, 'startDelivery'])->name('livreur.start');
+    Route::post('/deliveries/{delivery}/complete', [\App\Http\Controllers\Dashboard\LivreurDashboardController::class, 'completeDelivery'])->name('livreur.complete');
+    Route::get('/history', [\App\Http\Controllers\Dashboard\LivreurDashboardController::class, 'history'])->name('livreur.history');
 });
 
 // Auth

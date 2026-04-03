@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Order extends Model
 {
     use HasFactory;
-    protected $fillable = ['user_id', 'total', 'status'];
+    protected $fillable = ['user_id', 'total', 'status', 'delivery_address', 'delivery_city', 'delivery_postal_code', 'delivery_phone'];
 
     public function user()
     {
@@ -28,6 +28,11 @@ class Order extends Model
     public function latestPayment()
     {
         return $this->hasOne(Payment::class)->latestOfMany();
+    }
+
+    public function delivery()
+    {
+        return $this->hasOne(Delivery::class);
     }
 
 }

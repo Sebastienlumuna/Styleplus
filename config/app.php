@@ -16,7 +16,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Style-Plus'),
+    'name' => env('APP_NAME', 'Boutique fille de sarahPlus'),
 
     /*
     |--------------------------------------------------------------------------

@@ -31,6 +31,74 @@
         <form method="POST" action="{{ route('payment.process', $order) }}">
             @csrf
 
+            <!-- Adresse de livraison -->
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">📦 Adresse de livraison</h5>
+                </div>
+                <div class="card-body">
+                    <div class="form-group mb-3">
+                        <label for="delivery_address">Adresse complète <span class="text-danger">*</span></label>
+                        <input type="text" id="delivery_address" name="delivery_address" 
+                               class="form-control @error('delivery_address') is-invalid @enderror" 
+                               value="{{ old('delivery_address') }}" 
+                               placeholder="Ex: 123 Avenue de la Liberté" required>
+                        @error('delivery_address')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="delivery_city">Ville <span class="text-danger">*</span></label>
+                            <input type="text" id="delivery_city" name="delivery_city" 
+                                   class="form-control @error('delivery_city') is-invalid @enderror" 
+                                   value="{{ old('delivery_city') }}" 
+                                   placeholder="Ex: Kinshasa" required>
+                            @error('delivery_city')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="delivery_postal_code">Code postal</label>
+                            <input type="text" id="delivery_postal_code" name="delivery_postal_code" 
+                                   class="form-control @error('delivery_postal_code') is-invalid @enderror" 
+                                   value="{{ old('delivery_postal_code') }}" 
+                                   placeholder="Ex: 12345">
+                            @error('delivery_postal_code')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="delivery_phone">Téléphone de contact <span class="text-danger">*</span></label>
+                        <input type="tel" id="delivery_phone" name="delivery_phone" 
+                               class="form-control @error('delivery_phone') is-invalid @enderror" 
+                               value="{{ old('delivery_phone') }}" 
+                               placeholder="+243..." required>
+                        @error('delivery_phone')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="delivery_notes">Instructions de livraison (optionnel)</label>
+                        <textarea id="delivery_notes" name="delivery_notes" 
+                                  class="form-control" rows="2" 
+                                  placeholder="Ex: Sonner à l'interphone, 2ème étage">{{ old('delivery_notes') }}</textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mode de paiement -->
+            <div class="card mb-4">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">💳 Mode de paiement</h5>
+                </div>
+                <div class="card-body">
+
             <div class="form-group mb-3">
                 <label for="method">Mode de paiement <span class="text-danger">*</span></label>
                 <select id="method" name="method" class="form-control @error('method') is-invalid @enderror" required>
@@ -91,7 +159,9 @@
                 <small class="form-text text-muted d-block mb-3">⚠️ Ne stockez jamais le CVV sur votre serveur.</small>
             </div>
 
-            <button class="btn btn-primary mt-3" type="submit">💳 Payer</button>
+            <button class="btn btn-primary btn-lg w-100 mt-3" type="submit">💳 Confirmer et Payer {{ number_format($order->total, 2) }} XAF</button>
+                </div>
+            </div>
         </form>
     </div>
 </div>

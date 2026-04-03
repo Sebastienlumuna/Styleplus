@@ -18,6 +18,8 @@ class DashboardController extends Controller
         // Vérifier le rôle et rediriger
         if ($user->isAdmin()) {
             return redirect()->route('dashboard.admin');
+        } elseif ($user->role === UserRole::LIVREUR->value) {
+            return redirect()->route('dashboard.livreur');
         } elseif ($user->isClient()) {
             return redirect()->route('dashboard.client');
         }
